@@ -111,6 +111,21 @@ Contribuições são bem-vindas! Sinta-se à vontade para abrir issues ou enviar
 
 Este projeto está licenciado sob a Licença MIT - veja o arquivo [LICENSE](LICENSE) para detalhes.
 
+## Artigo Científico (LaTeX)
+
+Um artigo científico detalhando a metodologia e os resultados simulados do FocusGuard está disponível em formato LaTeX. Para compilar o PDF:
+
+1.  Certifique-se de ter uma distribuição LaTeX instalada (e.g., TeX Live).
+2.  Navegue até o diretório `FocusGuard`.
+3.  Execute os seguintes comandos no terminal:
+    ```bash
+    pdflatex paper.tex
+    biber paper
+    pdflatex paper
+    pdflatex paper
+    ```
+    O arquivo `paper.pdf` será gerado no mesmo diretório.
+
 ## Referências
 
 [1] Simulated Visual Data: Gerado via `data_simulator.py`.
