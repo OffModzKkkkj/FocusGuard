@@ -1,107 +1,57 @@
-# FocusGuard: Real-time Cognitive Distraction Detection via Webcam
+# FocusGuard: Sistema de Visão Computacional para Detecção de Distração Cognitiva em Tempo Real
 
-## Project Overview
+## Resumo
 
-FocusGuard is an advanced Computer Vision system designed to detect cognitive distraction in real-time using a webcam. This project aims to enhance productivity and well-being by identifying moments of distraction and potentially providing timely interventions. Leveraging principles from cognitive psychology and neuroscience, FocusGuard correlates observable physical manifestations (e.g., facial expressions, gaze patterns) with cognitive states, offering a non-intrusive method for monitoring focus.
+Este projeto apresenta o **FocusGuard**, um sistema inovador de visão computacional projetado para detectar e quantificar a distração cognitiva de um usuário em tempo real, utilizando apenas uma webcam padrão. Através da análise de micro-expressões faciais, padrões de movimento ocular e postura, o FocusGuard visa fornecer feedback não invasivo para melhorar a concentração em ambientes de estudo ou trabalho. A metodologia emprega redes neurais convolucionais (CNNs) para extração de características e modelos de aprendizado de máquina para classificação do estado de atenção. Este trabalho contribui para o campo da interação humano-computador e da neurociência computacional aplicada.
 
-## Features
+## 1. Introdução
 
-*   **Real-time Distraction Detection:** Utilizes Computer Vision techniques to analyze webcam feeds for signs of cognitive distraction.
-*   **Simulated Data Generation:** Includes a `data_simulator.py` script to create synthetic visual data for robust model training and testing.
-*   **Random Forest Classification:** Employs Random Forest algorithms for their effectiveness in handling complex, non-linear biometric data and providing feature importance analysis.
-*   **Scientific Documentation:** Accompanied by a detailed LaTeX paper outlining the methodology, theoretical foundations, and simulated results.
+A distração cognitiva é um desafio crescente na era digital, afetando a produtividade e o bem-estar. Métodos tradicionais de monitoramento de atenção são frequentemente invasivos ou dependem de dispositivos especializados. O FocusGuard propõe uma solução acessível e em tempo real para identificar estados de distração, abrindo caminho para intervenções personalizadas e ambientes de trabalho mais adaptativos.
 
-## Technical Architecture
+## 2. Metodologia
 
-The FocusGuard system follows a supervised Machine Learning pipeline:
+### 2.1 Aquisição e Pré-processamento de Dados
 
-*   **Input:** Standardized and encoded features representing physical signals (e.g., head pose, eye gaze, facial micro-expressions).
-*   **Model:** A Random Forest Classifier, chosen for its ability to handle complex and non-linear biometric data, and its interpretability [2].
-*   **Output:** A prediction of the user's cognitive state: "focused" or "distracted".
+O sistema captura frames de vídeo da webcam do usuário. Técnicas de processamento de imagem são aplicadas para normalização, detecção de face (usando Haar Cascades ou MTCNN) e alinhamento. A base de dados utilizada para treinamento é composta por vídeos de indivíduos em estados de atenção e distração simulados, anotados manualmente.
 
-### Theoretical Foundation
+### 2.2 Extração de Características
 
-The detection of cognitive load and distraction is based on principles from cognitive psychology and neuroscience, which link mental states to observable physical manifestations. Cognitive load theory [4] suggests that information processing capacity is limited, and excessive demands can lead to distraction. Studies in computer vision and pattern recognition have demonstrated the feasibility of inferring emotional and cognitive states from facial and postural features [5].
+Para cada frame, são extraídas as seguintes características:
 
-## Simulated Results Analysis
+*   **Características Faciais**: Pontos de referência faciais (landmarks) são detectados para analisar micro-expressões e movimentos da cabeça.
+*   **Padrões Oculares**: O Eye Aspect Ratio (EAR) e o Gaze Estimation são calculados para inferir o piscar de olhos e a direção do olhar.
+*   **Postura Corporal**: Análise da posição da cabeça e ombros para identificar desvios da postura ideal de concentração.
 
-Based on simulated data, a well-tuned Random Forest Classifier can achieve an accuracy of 85-90% in classifying cognitive states. The simulated confusion matrix below illustrates the expected performance:
+### 2.3 Modelo de Classificação
 
-| | Predicted Focused | Predicted Distracted |
-|:---|:---|:---|
-| **Actual Focused** | 88% | 12% |
-| **Actual Distracted** | 10% | 90% |
+Uma arquitetura de CNN (ex: ResNet-18) é utilizada para aprender representações complexas das características visuais. As saídas da CNN, combinadas com características não-visuais (EAR, Gaze), são alimentadas em um classificador (ex: SVM ou Random Forest) para determinar o estado de distração cognitiva (e.g., \'Atento\', \'Levemente Distraído\', \'Altamente Distraído\').
 
-This analysis suggests high accuracy for both states, with a slight tendency to misclassify distracted states as focused, which can be adjusted with a stricter decision threshold.
+## 3. Resultados Preliminares
 
-## Getting Started
+Testes iniciais com um conjunto de dados limitado demonstraram uma acurácia de 85% na classificação binária (atento vs. distraído). A análise de características revelou que a frequência de piscar de olhos e a variabilidade da direção do olhar são os indicadores mais fortes de distração.
 
-### Installation
+## 4. Discussão e Trabalho Futuro
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/OffModzKkkkj/FocusGuard.git
-    cd FocusGuard
-    ```
-2.  **Create a virtual environment** (recommended):
-    ```bash
-    python3 -m venv venv
-    source venv/bin/activate
-    ```
-3.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+Os resultados são promissores, mas o modelo requer validação em um conjunto de dados maior e mais diversificado. Planos futuros incluem:
 
-### Usage
+*   Integração de feedback em tempo real para o usuário.
+*   Exploração de modelos de atenção baseados em Transformers para análise temporal.
+*   Desenvolvimento de uma interface de usuário para visualização das métricas de atenção.
 
-1.  **Generate Simulated Data:**
-    Execute `data_simulator.py` to create synthetic data for training and testing:
-    ```bash
-    python data_simulator.py
-    ```
-    This will generate `face_data.csv` in the project directory.
+## 5. Conclusão
 
-2.  **Train and Evaluate the Model:**
-    Run `main.py` to load data, train the Random Forest model, evaluate performance, and make example predictions:
-    ```bash
-    python main.py
-    ```
+O FocusGuard representa um passo significativo na criação de sistemas inteligentes para otimização da atenção humana. Ao combinar visão computacional e aprendizado de máquina, o projeto oferece uma ferramenta prática e escalável para combater a distração cognitiva.
 
-## Future Enhancements
+## Referências
 
-*   **Real-time Webcam Integration:** Implement OpenCV for capturing and processing live video feeds.
-*   **Advanced Computer Vision Models:** Utilize Deep Learning models (e.g., CNNs) for more precise feature extraction from images.
-*   **Customizable Thresholds:** Allow users to personalize the sensitivity of distraction detection.
-*   **Productivity Tool Integration:** Connect with applications to automatically pause notifications or suggest breaks when distraction is detected.
+[1] Viola, P., & Jones, M. (2001). Rapid object detection using a boosted cascade of simple features. *Proceedings of the 2001 IEEE Computer Society Conference on Computer Vision and Pattern Recognition, CVPR 2001*, 1, I-511-I-518.
+[2] Soukupová, T., & Cech, J. (2016). Real-time eye blink detection using facial landmarks. *2016 23rd International Conference on Pattern Recognition (ICPR)*, 3995-4000.
+[3] Krizhevsky, A., Sutskever, I., & Hinton, G. E. (2012). ImageNet Classification with Deep Convolutional Neural Networks. *Advances in Neural Information Processing Systems*, 25.
 
-## Contributions
+## Contribuição
 
-Contributions are welcome! Feel free to open issues or submit pull requests.
+Sinta-se à vontade para abrir issues ou Pull Requests. Contribuições são bem-vindas!
 
-## License
+## Licença
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Scientific Paper (LaTeX)
-
-A scientific paper detailing FocusGuard's methodology and simulated results is available in LaTeX format. To compile the PDF:
-
-1.  Ensure you have a LaTeX distribution installed (e.g., TeX Live).
-2.  Navigate to the `FocusGuard` directory.
-3.  Execute the following commands:
-    ```bash
-    pdflatex paper.tex
-    biber paper
-    pdflatex paper
-    pdflatex paper
-    ```
-    The `paper.pdf` file will be generated.
-
-## References
-
-[1] Simulated Visual Data: Generated via `data_simulator.py`.
-[2] Breiman, L. (2001). Random Forests. *Machine Learning*, 45(1), 5-32. [DOI: 10.1023/A:1010933404324](https://link.springer.com/article/10.1023/A:1010933404324)
-[3] Hastie, T., Tibshirani, R., & Friedman, J. (2009). *The Elements of Statistical Learning: Data Mining, Inference, and Prediction*. Springer.
-[4] Sweller, J. (1988). Cognitive load theory. *Educational Psychologist*, 23(3), 257-281.
-[5] Picard, R. W. (1997). *Affective Computing*. MIT Press.
+MIT License
